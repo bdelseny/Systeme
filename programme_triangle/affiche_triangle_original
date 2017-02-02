@@ -27,13 +27,6 @@ static char * liste [] = {"./creer_boite", str_taille_police,
 
 static char message_usage [] = "nombre d'arguments incorrect\nUsage : triangle taille_police nb_lignes";
 
-/****************************************/
-/*	Arguments pour gv	    			*/
-/****************************************/
-
-char nomGV [] = "/usr/bin/gv";
-char *argumentsGV [] = {"/usr/bin/gv", "-", NULL};
-
 /*********************************************************************/
 /* Pour tracer les appels de boite_chiffre                          */
 /*********************************************************************/
@@ -111,6 +104,5 @@ int main(int argc, char *argv[], char *envp[])
   taille_triangle = nb_lignes;
   postscript_triangle (taille_police);
   sleep (3);
-  execve(nomGV, argumentsGV, envp);
   return 0;
 }
