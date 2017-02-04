@@ -1,0 +1,30 @@
+\section{Lancement de l'interprète PostScript par exec}
+
+Les exécutables des commandes \verb!gv! et \verb!gs! se trouvent dans les répertoire \verb!/usr/bin/gv! et \verb!/usr/bin/gs!, chemin qu'il a été possible de trouver grâce à la commande \verb!which!.
+Ainsi exécuter la commande \verb!>/usr/bin/gv triangle.ps! revient au même que d'exécuter la commande \verb!>gv triangle.ps!.
+
+Afin d'exécuter directement l'interpreteur de PostScript lors de l'exécution du programme il faut modifier le code source de \verb!affiche_triangle!.
+Il faudra commencer par initialiser deux variables. Un texte contenant le chemin de la commande de l'interpréteur PostScript à utiliser. Ainsi qu'un tableau de texte contenant la commande ainsi que ces arguments. Le code nécessaire pour l'interpréteur \verb!gv! et celui pour \verb!gs! est ici : \ref{lst:variables_q2}.
+
+\begin{lstlisting}[language=C, label={lst:variables_q2}, caption=Initialisation des variables pour exec de gv et gs]
+/*	Arguments pour gv	*/
+char nomGV [] = "/usr/bin/gv";
+char *argumentsGV [] = {"/usr/bin/gv", "triangle.ps", NULL};
+
+/*  Arguments pour gs	*/
+char nomGS [] = "/usr/bin/gs";
+char *argumentsGS [] = {"/usr/bin/gs", "-q", "-sDEVICE=x11", "triangle.ps", NULL};
+\end{lstlisting}
+
+Ensuite il faudra ajouter la commande \verb!execve(...)! correspondante à l'interprète choisi à la fin du \verb!main()! (code \ref{lst:code_exec})
+
+\begin{lstlisting}[language=C, label={lst:code_exec}, caption=Appel de la fonction execve() pour gv et gs]
+/*  Execution de gv	*/
+execve(nomGV, argumentsGV, envp);
+
+/*  Execution de gs	*/
+execve(nomGS, argumentsGS, envp);
+\end{lstlisting}
+
+Puis il faut recompiler le code avec \verb!>make!. Il suffira d'exécuter le programme à l'aide de la commande \verb!>./triangle 12 4 > triangle.ps! pour obtenir le même résultat que pour la section \ref{sec:tube}. On peut en plus rediriger la sortie standard d'erreur dans un fichier à l'aide de l'option \verb! 2> fichier.log! comme suit \verb!>./triangle 12 4 > triangle.ps 2> triangle.log!.
+

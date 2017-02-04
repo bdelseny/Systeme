@@ -1,0 +1,124 @@
+
+
+\documentclass[12pt]{article} % format du document
+\usepackage[utf8]{inputenc} % type d'encodage utf8 unix, le plus worlwide
+% \usepackage[round]{natbib} % package de format biblio
+\usepackage[T1]{fontenc} % police d'encodage, OT1 moins de caractère que T1 (qui contient les caractères spéciaux)
+\usepackage[english,francais]{babel} % package de langue
+\usepackage{amsmath} % pour écrire les formules maths et améliorer la sortie
+\usepackage{amssymb} % symboles additionnels pour amsmath
+\usepackage{mathrsfs} % des symboles additionnels de physique (entre autre)
+\usepackage[pdftex]{graphicx} % package pour les graphiques, version avancée
+\usepackage[hmargin=2.5cm, vmargin=2cm]{geometry} % marges
+\usepackage{setspace} % interlignes
+\usepackage{fancyhdr} % customisation des hauts et bas de page
+\usepackage[svgnames, table]{xcolor} % contrôle des couleurs avancé
+\usepackage[unicode=true]{hyperref} % pour les liens et customisation de ceux-ci
+\usepackage{verbatim}
+\usepackage{listings} % pour du code, certains langages prédéfini, sortie simple
+\usepackage{lastpage} % pour récupérer la dernière page
+\usepackage{times} % police d'écriture
+\usepackage{titlesec} % formatage des titres
+\usepackage{framed}
+%\overfullrule=2cm
+
+\titlespacing{\paragraph}{0em}{1em}{1em} % pas de tabulation pour subsubsection, 1.5em espace au dessus, 0.5em en dessous
+
+%%%%%%%%%%% Configuration couleurs & auteur du pdf %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{breaklinks=true,
+            pdfauthor={Bastien Delseny},
+            pdftitle={Triangle de Pascal},
+            colorlinks=true,
+            citecolor=DarkGreen,
+            urlcolor=blue,
+            linkcolor=DarkRed,
+            pdfborder={0 0 0}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------- Configuration de listings --------------%
+%breaklines => retours à la ligne
+%postbreak => configuration du retour à la ligne
+\lstset{
+    frame=single,
+    breaklines=true,
+    postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}}
+}
+
+%----------------- VERBATIM ---------------------%
+\makeatletter
+\newcommand{\verbatimfont}[1]{\def\verbatim@font{#1}}%
+\makeatother
+\verbatimfont{\color{DarkGreen}\sffamily}
+
+% ---------------- URLS ----------------------------------%
+\urlstyle{same}  % don't use monospace font for urls
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} %Hrule fait des lignes horizontales de 0.5mm d'épaisseur
+
+%%%%%%%%%%%%% On met une ligne en haut et bas de page %%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\headrulewidth}{0.1pt}
+%\renewcommand{\footrulewidth}{0.1pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%% On crée une commande pour faire des saut de paragraphe réglables 0em par défault %%%%%%%%%%%%%%%%%%%%%
+\newcommand{\PAR}[1][0em]{\setlength{\parskip}{#1}\par}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%							DOCUMENT											%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+	%-------------------------------------------------------------------------------%
+	%							Page de garde										%
+	%-------------------------------------------------------------------------------%
+	\include{items/PageDeGarde}
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%						Table des matières										%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\normalsize
+	\clearpage
+	\pagestyle{empty}
+	\renewcommand{\contentsname}{Table des matières}
+	\setstretch{2}
+	\vspace*{\fill} \tableofcontents \vfill
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%									RAPPORT										%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\clearpage
+	%	\pagestyle{fancy}
+	%		\lhead{\leftmark}
+	%		\chead{ }
+	%		\rhead{Bastien Delseny}
+	%		\lfoot{\textit{Gestion multifonctionnelle d'une for\^{e}t en univers risqu\'e}}
+	%		\cfoot{}
+	%		\rfoot{\thepage/\pageref*{ArabePage}}
+		\pagestyle{fancy}
+			\lhead{}
+			\chead{\leftmark}
+			\rhead{}
+			\lfoot{}
+			\cfoot{}
+			\rfoot{\thepage/\pageref*{ArabePage}}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%						TEXTE DU RAPPORT										%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\clearpage
+	\setstretch{1.5}
+	\setcounter{page}{1}
+	\input{items/questions1} \input{items/questions2} \input{items/questions3}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%							BIBLIOGRAPHIE										%
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\normalsize
+	% \addcontentsline{toc}{section}{R\'ef\'erences bibliographiques}
+	% \bibliographystyle{plainnat}
+	% \setstretch{1}
+	% \bibliography{Revue}
+	%\renewcommand{\listfigurename}{Images et figures}
+	%\listoffigures
+	\label{ArabePage}
+
+\end{document}
+%test

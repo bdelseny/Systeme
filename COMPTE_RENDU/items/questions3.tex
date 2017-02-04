@@ -1,0 +1,48 @@
+\section{Lancement de gs par fork et exec}
+\subsection{Vérification de la taille de police et du nombre de lignes}
+
+Afin de vérifier si la taille de la police et si le nombre de ligne sont correctes on peut ajouter le code suivant \ref{lst:verif} dans le code source de \verb!affiche_triangle.c!
+
+\begin{lstlisting}[language=C, label={lst:verif}, caption={Vérification de la taille de police comprise entre 8 et 24, et du nombre de lignes comprit entre 1 et 40.}]
+  if(taille_police < 8 || taille_police > 24){
+	  fprintf(stderr, "Taille de police incorrecte, valeur entre 8 et 24 attendue\n");
+	  exit(1);
+  }
+  if(nb_lignes < 1 || nb_lignes > MAX_LIGNES){ // MAX_LIGNES = 40
+	  fprintf(stderr, "Nombre de lignes incorrecte, valeur entre 1 et %d attendue\n", MAX_LIGNES);
+	  exit(1);
+  }
+\end{lstlisting}
+
+\subsection{Une histoire de père et de fils}
+La fonction C \verb!frok()! permet de créer un fils. 
+Il faut commencer par initialiser deux variables dans \verb!affiche_triangle.ps!. Une variable qui permettra de récupérer le pid du fils grâce à la commande \verb!pid_t p;!. Il faut aussi une variable qui permettra de récupérer le code de retour, code d'erreur ou de réussite de la fin d'exécution du fils, grâce à la commande \verb!int retour;!.
+Afin que le processus fils exécute \verb!gv! ou \verb!gs! il faut procéder comme indiquer dans le code \ref{lst:pereFils}.
+
+\begin{lstlisting}[language=C, label={lst:pereFils}, caption={Création d'un fils qui execute la fonction execve permettant la lecture du fichier PostScript par un interpréteur de PostScript.}]
+/* Generation des triangles par le pere */
+sortie = "stdout";
+taille_triangle = nb_lignes;
+postscript_triangle (taille_police);
+sleep (3);
+
+/* Creation d'un processus fils */
+p = fork();
+
+/* Verification de la creation d'un fils a l'aide de la commande fork */
+if(p < 0) {
+	fprintf(stderr, "Luke (fils) n'a pas pu etre creer par fork\nVador (pere) est triste\n");
+	exit(1);
+}
+
+/* Fils creer  plus qu'a attendre qu'il affiche les triangles*/
+if(p != 0){
+	/* Attendre la terminaison du fils */
+	wait(&retour);
+	fprintf(stderr, "Generation et affichage du triangle de Pascal termine\n");
+} else {	
+	/* Execution de l'interpreteur de PostScript */
+	execve(nomGV, argumentsGV, envp);
+	//execve(nomGS, argumentsGS, envp);
+}
+\end{lstlisting}

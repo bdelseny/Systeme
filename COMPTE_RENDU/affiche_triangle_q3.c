@@ -126,27 +126,28 @@ int main(int argc, char *argv[], char *envp[])
 	  exit(1);
   }
 
+  /* Génération des triangles par le père */
+ 		sortie = "stdout";
+  		taille_triangle = nb_lignes;
+  		postscript_triangle (taille_police);
+  		sleep (3);
 	
+/* Creation d'un processus fils */
 	p = fork();
 	
 	/* Verification de la création d'un fils a l'aide de la commande fork */
 	if(p < 0) {
-		fprintf(stderr, "Luke (fils) n'a pas pu etre creer par fork\nVador son pere est triste\n");
+		fprintf(stderr, "Luke (fils) n'a pas pu etre creer par fork\nVador (pere) est triste\n");
 		exit(1);
 	}
 	
-	/* Fils creer  plus qu'a attendre qu'il finisse les triangles*/
+	/* Fils creer  plus qu'a attendre qu'il affiche les triangles*/
 	if(p != 0){
 		/* Attendre la terminaison du fils */
 		wait(&retour);
 		fprintf(stderr, "Generation et affichage du triangle de Pascal termine\n");
 	} else {	
-		/* Le fils fait des triangles */
- 		sortie = "stdout";
-  		taille_triangle = nb_lignes;
-  		postscript_triangle (taille_police);
-  		sleep (3);
-  		execve(nomGV, argumentsGV, envp);
+		execve(nomGV, argumentsGV, envp);
  	 	//execve(nomGS, argumentsGS, envp);
  	}
 	
