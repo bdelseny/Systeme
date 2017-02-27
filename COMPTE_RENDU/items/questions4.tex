@@ -1,6 +1,7 @@
-\section{Génération du Postscript dans un fichier.}
+\section{Génération du PostScript dans un fichier.}
 
-Après avoir généré le Postscript du triangle dans \verb!triangle.ps! il est possible de connaître la taille de ce fichier Postsrcipt. Pour cela il suffit d'effectuer la commande \verb!ls -l triangle.ps! dans le terminal.
+Après avoir généré le PostScript du triangle dans \verb!triangle.ps! il est possible de connaître la taille de ce fichier PostScript. 
+Pour cela il suffit d'effectuer la commande \verb!ls -l triangle.ps! dans le terminal.
 On observe que la taille du fichier est de $1,9ko$, appelons $T1$ cette taille.
 
 \subsection{Un problème de taille}
@@ -8,25 +9,25 @@ On observe que la taille du fichier est de $1,9ko$, appelons $T1$ cette taille.
 Après avoir supprimé le fichier de $1,9ko$ \verb!triangle.ps! et modifié le code de la procédure main pour affecter la sortie à un fichier \verb!triangle.ps! il faut compiler le code et exécuter le programme.
 À la fin de l'exécution il y a un nouveau fichier \verb!triangle.ps!.
 Ce fichier fait une taille $T2$ de $185o$. 
-La taille de ce nouveau fichier $T2$ est donc largement inférieur à la taille du fichier précédent $T1$.
-Lorsque l'on ouvre \verb!triangle.ps! avec un interpréteur de Postscript on se rend compte qu'un seul triangle a été créé.
+La taille de ce nouveau fichier $T2$ est donc largement inférieure à la taille du fichier précédent $T1$.
+Lorsque l'on ouvre \verb!triangle.ps! avec un interpréteur de PostScript on se rend compte qu'un seul triangle a été créé.
 
 \subsection{Il nous manque des cases}
 \label{sub:cases}
 
 La ligne $66$ de la fonction \verb!boite_chiffre()! du code \verb!boite_chiffre.c! permet de définir les options d'écriture dans le fichier de sortie.
 On remarque que le code est le suivant : \verb!fsortie = fopen(sortie, ``w'')!.
-L'option \verb!w! permet de créer un nouveau fichier et d'écrire dans ce fichier.
+L'option \verb!w! permet de créer un nouveau fichier, en supprimant celui existant, et d'écrire dans ce fichier.
 Or dans le code \verb!affiche_triangle.c! on observe que la fonction \verb!postscript_triangle()! fait appelle à une boucle sur la fonction \verb!boite_chiffre()!.
-Donc à chaque appelle de \verb!boite_chiffre()! un nouveau fichier va être créé et une seule boite sera dessinée.
-Pour palier à ce problème il nous faut changer l'option \verb!w! de la fonction \verb!fopen()! par l'option \verb!a! qui permet de continuer l'écriture dans le fichier existant si celui-ci existe, sinon le fichier sera créé.
+Donc à chaque appel de \verb!boite_chiffre()! un nouveau fichier va être créé et une seule boite sera dessinée.
+Pour palier à ce problème il nous faut changer l'option \verb!w! de la fonction \verb!fopen()! par l'option \verb!a! qui permet de continuer l'écriture dans le fichier existant si celui-ci existe, sinon de créer le fichier.
 
 \subsection{Un problème de superposition}
 
 Maintenant un nouveau problème fait face.
 Lorsque nous lançons plusieurs fois l'exécution du programme les triangles se superposent.
 Ce qui rend à la fois la présentation des triangles illisibles et la taille des fichiers exponentielle.
-Il faut donc qu'au début de l'exécution du programme un nouveau fichier soit créé afin de ne pas réécrire à la suite d'un fichier existant.
+Il faut donc qu'au début de l'exécution du programme un nouveau fichier soit créé afin de ne pas ré-écrire à la suite d'un fichier existant.
 Pour ce faire il faut modifier le code de la fonction \verb!postscript_triangle()! du code \verb!affiche_triangle.c!.
 Il faut en début de cette fonction initialiser un fichier si la sortie n'est pas la sortie standard.
 On rajoute alors le code \ref{lst:sortiePremiere} en début de la fonction \verb!postscript_triangle()!

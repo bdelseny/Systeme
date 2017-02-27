@@ -7,8 +7,8 @@
 \contentsline {section}{\numberline {2}Lancement de l'interpr\IeC {\`e}te PostScript par exec}{2}{section.2}
 \contentsline {section}{\numberline {3}Lancement de gs par fork et exec}{4}{section.3}
 \contentsline {subsection}{\numberline {3.1}V\IeC {\'e}rification de la taille de police et du nombre de lignes}{4}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Une histoire de p\IeC {\`e}re et de fils}{4}{subsection.3.2}
-\contentsline {section}{\numberline {4}G\IeC {\'e}n\IeC {\'e}ration du Postscript dans un fichier.}{5}{section.4}
+\contentsline {subsection}{\numberline {3.2}Une histoire de p\IeC {\`e}re et fils}{4}{subsection.3.2}
+\contentsline {section}{\numberline {4}G\IeC {\'e}n\IeC {\'e}ration du PostScript dans un fichier.}{5}{section.4}
 \contentsline {subsection}{\numberline {4.1}Un probl\IeC {\`e}me de taille}{6}{subsection.4.1}
 \contentsline {subsection}{\numberline {4.2}Il nous manque des cases}{6}{subsection.4.2}
 \contentsline {subsection}{\numberline {4.3}Un probl\IeC {\`e}me de superposition}{6}{subsection.4.3}

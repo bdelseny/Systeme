@@ -14,37 +14,37 @@ Afin de vérifier si la taille de la police et si le nombre de ligne sont correc
   }
 \end{lstlisting}
 
-\subsection{Une histoire de père et de fils}
-La fonction C \verb!fork()! permet de créer un fils. 
+\subsection{Une histoire de père et fils}
+La fonction C \verb!fork()! permet de créer un fils du programme. 
 Il faut commencer par initialiser deux variables dans \verb!affiche_triangle.c!.
-Une variable qui permettra de récupérer le pid du fils grâce à la commande \verb!pid_t p;!.
-Il faut aussi une variable qui permettra de récupérer le code de retour, code d'erreur ou de réussite de la fin d'exécution du fils, grâce à la commande \verb!int retour;!.
+Une variable qui permet de récupérer le \verb!pid! du fils grâce à la commande \verb!pid_t p;!.
+Il faut aussi une variable qui permet de récupérer le code de retour, code d'erreur ou de réussite de la fin d'exécution du fils, grâce à la commande \verb!int retour;!.
 Afin que le processus fils exécute \verb!gv! ou \verb!gs! il faut procéder comme indiquer dans le code \ref{lst:pereFils}.
 
-\begin{lstlisting}[language=C, label={lst:pereFils}, caption={Création d'un fils qui execute la fonction execve permettant la lecture du fichier PostScript par un interpréteur de PostScript.}]
+\begin{lstlisting}[language=C, label={lst:pereFils}, caption=Création d'un fils qui exécute la fonction execve() permettant la lecture du fichier PostScript par un interpréteur de PostScript.]
 /* Generation des triangles par le pere */
 sortie = "stdout";
 taille_triangle = nb_lignes;
-postscript_triangle (taille_police);
+postscript_triangle( taille_police );
 sleep (3);
 
 /* Creation d'un processus fils */
 p = fork();
 
 /* Verification de la creation d'un fils a l'aide de la commande fork */
-if(p < 0) {
-	fprintf(stderr, "Luke (fils) n'a pas pu etre creer par fork\nVador (pere) est triste\n");
+if( p < 0 ) {
+	fprintf(stderr, "Luke (fils) n'a pas pu etre creer par fork()\nVador (pere) est triste\n");
 	exit(1);
 }
 
-/* Fils creer  plus qu'a attendre qu'il affiche les triangles*/
-if(p != 0){
+/* Fils cree plus qu'a attendre qu'il n'affiche les triangles*/
+if( p != 0 ){
 	/* Attendre la terminaison du fils */
-	wait(&retour);
-	fprintf(stderr, "Generation et affichage du triangle de Pascal termine\n");
+	wait( &retour );
+	fprintf( stderr, "Generation et affichage du triangle de Pascal termine\n" );
 } else {	
 	/* Execution de l'interpreteur de PostScript */
-	execve(nomGV, argumentsGV, envp);
-	//execve(nomGS, argumentsGS, envp);
+	execve( nomGV, argumentsGV, envp );  // Pour executer GV
+	//execve( nomGS, argumentsGS, envp ); // Pour executer GS
 }
 \end{lstlisting}
