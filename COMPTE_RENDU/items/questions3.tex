@@ -15,8 +15,10 @@ Afin de vérifier si la taille de la police et si le nombre de ligne sont correc
 \end{lstlisting}
 
 \subsection{Une histoire de père et de fils}
-La fonction C \verb!frok()! permet de créer un fils. 
-Il faut commencer par initialiser deux variables dans \verb!affiche_triangle.ps!. Une variable qui permettra de récupérer le pid du fils grâce à la commande \verb!pid_t p;!. Il faut aussi une variable qui permettra de récupérer le code de retour, code d'erreur ou de réussite de la fin d'exécution du fils, grâce à la commande \verb!int retour;!.
+La fonction C \verb!fork()! permet de créer un fils. 
+Il faut commencer par initialiser deux variables dans \verb!affiche_triangle.c!.
+Une variable qui permettra de récupérer le pid du fils grâce à la commande \verb!pid_t p;!.
+Il faut aussi une variable qui permettra de récupérer le code de retour, code d'erreur ou de réussite de la fin d'exécution du fils, grâce à la commande \verb!int retour;!.
 Afin que le processus fils exécute \verb!gv! ou \verb!gs! il faut procéder comme indiquer dans le code \ref{lst:pereFils}.
 
 \begin{lstlisting}[language=C, label={lst:pereFils}, caption={Création d'un fils qui execute la fonction execve permettant la lecture du fichier PostScript par un interpréteur de PostScript.}]

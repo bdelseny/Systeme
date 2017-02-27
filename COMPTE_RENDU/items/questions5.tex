@@ -1,0 +1,91 @@
+\section{Création d'un tube entre triangle et gs}
+
+Le but ici est que le processus père créer un tube et créer deux fils qui intéragissent à l'aide de ce tube.
+Ainsi on commence par créer un tube de redirection à l'aide de la commande \verb!pipe()!.
+Une fois le tube créer on créer un processus fils qui va générer le Postscript de triangle vers l'entrée du tube.
+Ainsi la sortie standard est redirigée vers l'entrée du tube de redirection.
+On termine le processus fils et on créer un nouveau processus fils.\\
+On redirige l'entrée standard, qui sera donc celle du nouveau fils, vers la sortie du tube de redirection.
+Le processus fils lance alors l'interprète de Postscript.\\
+Une fois que l'interpréte de Postscript est terminé on termine le processus fils puis on ferme le tube de redirection.\\
+L'ensemble du code est détaillé ici : \ref{lst:tubeq5}.
+
+\begin{lstlisting}[language=C, label={lst:tubeq5}, caption={Utilisation d'un tube dans la fonction main.}]
+int main(int argc, char *argv[], char *envp[])
+{
+  /* Initialisation des variables */
+  unsigned int taille_police, nb_lignes;
+  char nom_executable[200];
+  pid_t p_gauche, p_droit;
+  int retour_gauche, retour_droit;
+  int tube[2];
+
+  lire_args(argc,argv,3,message_usage, 
+        "%s",nom_executable,"",
+        "%d",&taille_police,"taille_de_police_incorrecte",
+        "%d",&nb_lignes,"nombre de lignes incorrect");
+
+  /* Verification des valeurs */
+  /* de taille_police [8,24] et nb_lignes [1,MAX_LIGNES]  */
+  if(taille_police < 8 || taille_police > 24){
+          fprintf(stderr, "Taille de police incorrecte, valeur entre 8 et 24 attendue\n");
+          exit(1);
+  }
+  if(nb_lignes < 1 || nb_lignes > MAX_LIGNES){
+          fprintf(stderr, "Nombre de lignes incorrecte, valeur entre 1 et %d attendue\n", MAX_LIGNES);
+          exit(1);
+  }
+    
+        /* Creation d'un tube */
+        pipe(tube);
+
+        /* Fils gauche */
+        p_gauche = fork();
+        
+        if(p_gauche < 0) { // erreur
+                fprintf(stderr, "Le fils n'a pas pu etre cree\n");
+        }
+
+		/* Le fils gauche genere le Postscript,
+			envoie la sortie standard vers l'entree du tube */
+        if(p_gauche == 0){
+                close(tube[0]); // fermeture de la sortie du tube
+                dup2(tube[1],1);
+                sortie = "stdout";
+                taille_triangle = nb_lignes;
+                postscript_triangle (taille_police);
+                sleep (3);
+                close(tube[1]);
+                exit(0);
+                
+        }
+
+		p_droit = fork();
+        if(p_droit < 0) { // erreur
+                fprintf(stderr, "Le fils n'a pas pu etre cree\n");
+        }
+		
+		/* Le fils droit recupere la sortie du tube,
+			ouvre l'interprete de Postscript */
+        if(p_droit == 0){
+                close(tube[1]); // On ferme la sortie du tube
+                dup2(tube[0],0);
+                execve(nomGV, argumentsGV, envp);
+                close(tube[0]);
+                exit(0);
+        }
+
+        /* fermeture des tubes du pere */    
+        close(tube[0]);
+        close(tube[1]);
+
+        /* Attente de la fin des fils */
+        waitpid(p_gauche, &retour_gauche, 0);
+        waitpid(p_droit, &retour_droit, 0);
+        
+        fprintf(stderr, "Generation et affichage du triangle de Pascal termine\n");
+        
+        
+  return 0;
+}
+\end{lstlisting}

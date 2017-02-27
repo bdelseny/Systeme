@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <sys/wait.h>
 
 #include "calcul_triangle.h"
 #include "boite_chiffre.h"
@@ -28,13 +26,6 @@ static char * liste [] = {"./creer_boite", str_taille_police,
 
 
 static char message_usage [] = "nombre d'arguments incorrect\nUsage : triangle taille_police nb_lignes";
-
-/****************************************/
-/*	Arguments pour gv question2			*/
-/****************************************/
-char nomGV [] = "/usr/bin/gv";
-char *argumentsGV [3] = {"/usr/bin/gv", "-", NULL};
-
 
 /*********************************************************************/
 /* Pour tracer les appels de boite_chiffre                          */
@@ -73,11 +64,6 @@ void postscript_triangle (unsigned int taille_police)
 
   delta_x = (nb_car +1) * RATIO_DELTA_X * taille_police ;
   delta_y = RATIO_DELTA_Y * taille_police;
-	
-	/* Création du fichier de sortie si besoin */
-	if (strcmp(sortie, "stdout")!=0){
-		fopen(sortie, "w");
-	}
 
   for (ligne=0; ligne< nombre_lignes; ligne++)
     for (colonne=0; colonne<= ligne; colonne++)
@@ -105,10 +91,7 @@ int main(int argc, char *argv[], char *envp[])
 {
   unsigned int taille_police, nb_lignes;
   char nom_executable[200];
-  pid_t p_gauche, p_droit;
-  int retour_gauche, retour_droit;
-  int tube[2];
-
+  
   lire_args(argc,argv,3,message_usage, 
         "%s",nom_executable,"",
         "%d",&taille_police,"taille_de_police_incorrecte",
@@ -116,58 +99,10 @@ int main(int argc, char *argv[], char *envp[])
 
   /* Ici il faudrait ajouter une verification des valeurs */
   /* de taille_police [8,24] et nb_lignes [1,MAX_LIGNES]  */
-  if(taille_police < 8 || taille_police > 24){
-	  fprintf(stderr, "Taille de police incorrecte, valeur entre 8 et 24 attendue\n");
-	  exit(1);
-  }
-  if(nb_lignes < 1 || nb_lignes > MAX_LIGNES){
-	  fprintf(stderr, "Nombre de lignes incorrecte, valeur entre 1 et %d attendue\n", MAX_LIGNES);
-	  exit(1);
-  }
-    
-	/* On crée un tube */
-	pipe(tube);
 
-	/* Fils gauche */
-	p_gauche = fork();
-	
-	if(p_gauche < 0) { // erreur
-		fprintf(stderr, "Le fils n'a pas pu etre cree\n");
-	}
-	if(p_gauche == 0){
-		close(tube[0]); 
- 		dup2(tube[1],1);
-		sortie = "stdout";
-		taille_triangle = nb_lignes;
-  		postscript_triangle (taille_police);
-  		sleep (3);
-		close(tube[1]);
-		exit(0);
-  		
-  	}
-
-	p_droit = fork();
-	if(p_droit < 0) { // erreur
-		fprintf(stderr, "Le fils n'a pas pu etre cree\n");
-	}
-	if(p_droit == 0){
-		close(tube[1]);
-		dup2(tube[0],0);
-		execve(nomGV, argumentsGV, envp);
-		close(tube[0]);
-		exit(0);
-  	}
-
-	/* fermeture des tubes du père */	
-	close(tube[0]);
-	close(tube[1]);
-
-	/* Attente de la fin des fils */
-	waitpid(p_gauche, &retour_gauche, 0);
-	waitpid(p_droit, &retour_droit, 0);
-	
-	fprintf(stderr, "Generation et affichage du triangle de Pascal termine\n");
-	
-	
+  sortie = "stdout";
+  taille_triangle = nb_lignes;
+  postscript_triangle (taille_police);
+  sleep (3);
   return 0;
 }
